@@ -31,7 +31,7 @@ public class HomeView extends VerticalLayout {
         List<QuoteLibDto> quotes = quoteLibService.fetchRandomQuote();
 
         for (QuoteLibDto quote : quotes) {
-            add(new H3("\"" + quote.getQuote_text() + "\""));
+            add(new Paragraph("\"" + quote.getQuote_text() + "\""));
             add(new Paragraph("- " + quote.getAuthor()));
         }
 

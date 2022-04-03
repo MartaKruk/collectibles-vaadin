@@ -21,4 +21,7 @@ public class ResultBookDto {
 
     @JsonProperty("author_name")
     private List<String> authors;
+
+    @JsonProperty("first_publish_year")
+    private int year;
 }

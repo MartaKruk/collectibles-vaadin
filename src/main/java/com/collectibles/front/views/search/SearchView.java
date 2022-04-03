@@ -6,6 +6,7 @@ import com.collectibles.front.views.MainLayout;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -73,21 +74,30 @@ public class SearchView extends VerticalLayout {
         header.setSpacing(false);
         header.getThemeList().add("spacing-s");
 
-        Span name = new Span(resultBookDto.getTitle());
-        name.addClassName("name");
+        HorizontalLayout body = new HorizontalLayout();
+        body.addClassName("body");
+        body.setSpacing(false);
+        body.getThemeList().add("spacing-s");
+
+        Span title = new Span(resultBookDto.getTitle());
+        title.addClassName("title");
         StringBuilder builder = new StringBuilder();
         for (String author : resultBookDto.getAuthors()) {
             builder.append(author);
             builder.append(", ");
         }
 
-        Span author = new Span(builder.deleteCharAt(builder.lastIndexOf(", ")).toString());
+        Span author = new Span(builder.toString());
         author.addClassName("author");
-        header.add(name, author);
 
-        Button addButton = new Button("Add to collection", new Icon(VaadinIcon.PLUS));
+        Span year = new Span(String.valueOf(resultBookDto.getYear()));
+        author.addClassName("year");
+        header.add(title);
 
-        description.add(header, addButton);
+        Button addButton = new Button("Add", new Icon(VaadinIcon.PLUS));
+
+        body.add(author, year);
+        description.add(header, body, addButton);
         card.add(description);
         return card;
     }
