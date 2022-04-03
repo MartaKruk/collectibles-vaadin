@@ -2,11 +2,10 @@ package com.collectibles.front.data.client;
 
 import com.collectibles.front.data.domain.ResultBookDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.URI;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -16,12 +15,14 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class OpenLibraryClient {
 
+    @Value("${collectibles.app.openlibrary.endpoint}")
+    private String endpoint;
+
     private final RestTemplate restTemplate;
 
     public List<ResultBookDto> getBooksByAuthor(String keyword) {
-        URI url = UriComponentsBuilder.fromHttpUrl("http://localhost:8080/v1/search/author/" + keyword).build().encode().toUri();
         ResultBookDto[] response = restTemplate.getForObject(
-                url,
+                endpoint + "/author/" + keyword,
                 ResultBookDto[].class
         );
 
@@ -31,9 +32,8 @@ public class OpenLibraryClient {
     }
 
     public List<ResultBookDto> getBooksByTitle(String keyword) {
-        URI url = UriComponentsBuilder.fromHttpUrl("http://localhost:8080/v1/search/title/" + keyword).build().encode().toUri();
         ResultBookDto[] response = restTemplate.getForObject(
-                url,
+                endpoint + "/title/" + keyword,
                 ResultBookDto[].class
         );
 

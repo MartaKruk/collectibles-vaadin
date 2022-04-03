@@ -1,6 +1,6 @@
 package com.collectibles.front.data.client;
 
-import com.collectibles.front.data.domain.QuoteDto;
+import com.collectibles.front.data.domain.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -13,17 +13,17 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class QuoteClient {
+public class UserClient {
 
-    @Value("${collectibles.app.quotes.endpoint}")
+    @Value("${collectibles.app.users.endpoint}")
     private String endpoint;
 
     private final RestTemplate restTemplate;
 
-    public List<QuoteDto> getQuotes() {
-        QuoteDto[] response = restTemplate.getForObject(
+    public List<UserDto> getUsers() {
+        UserDto[] response = restTemplate.getForObject(
                 endpoint,
-                QuoteDto[].class
+                UserDto[].class
         );
 
         return Optional.ofNullable(response)
@@ -31,32 +31,32 @@ public class QuoteClient {
                 .orElse(Collections.emptyList());
     }
 
-    public QuoteDto getQuote(Long id) {
-        QuoteDto response = restTemplate.getForObject(
+    public UserDto getUser(Long id) {
+        UserDto response = restTemplate.getForObject(
                 endpoint + "/" + id,
-                QuoteDto.class
+                UserDto.class
         );
 
         return Optional.ofNullable(response)
-                .orElse(new QuoteDto());
+                .orElse(new UserDto());
     }
 
-    public void deleteQuote(Long id) {
+    public void deleteUser(Long id) {
         restTemplate.delete(endpoint + "/" + id);
     }
 
-    public void updateQuote(QuoteDto quoteDto) {
+    public void updateUser(UserDto userDto) {
         restTemplate.put(
                 endpoint,
-                quoteDto
+                userDto
         );
     }
 
-    public void createQuote(QuoteDto quoteDto) {
+    public void createUser(UserDto userDto) {
         restTemplate.postForObject(
                 endpoint,
-                quoteDto,
-                QuoteDto.class
+                userDto,
+                UserDto.class
         );
     }
 }

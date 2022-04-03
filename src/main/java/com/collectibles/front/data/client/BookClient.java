@@ -1,6 +1,6 @@
 package com.collectibles.front.data.client;
 
-import com.collectibles.front.data.domain.QuoteDto;
+import com.collectibles.front.data.domain.BookDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -13,17 +13,17 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class QuoteClient {
+public class BookClient {
 
-    @Value("${collectibles.app.quotes.endpoint}")
+    @Value("${collectibles.app.books.endpoint}")
     private String endpoint;
 
     private final RestTemplate restTemplate;
 
-    public List<QuoteDto> getQuotes() {
-        QuoteDto[] response = restTemplate.getForObject(
+    public List<BookDto> getBooks() {
+        BookDto[] response = restTemplate.getForObject(
                 endpoint,
-                QuoteDto[].class
+                BookDto[].class
         );
 
         return Optional.ofNullable(response)
@@ -31,32 +31,32 @@ public class QuoteClient {
                 .orElse(Collections.emptyList());
     }
 
-    public QuoteDto getQuote(Long id) {
-        QuoteDto response = restTemplate.getForObject(
+    public BookDto getBook(Long id) {
+        BookDto response = restTemplate.getForObject(
                 endpoint + "/" + id,
-                QuoteDto.class
+                BookDto.class
         );
 
         return Optional.ofNullable(response)
-                .orElse(new QuoteDto());
+                .orElse(new BookDto());
     }
 
-    public void deleteQuote(Long id) {
+    public void deleteBook(Long id) {
         restTemplate.delete(endpoint + "/" + id);
     }
 
-    public void updateQuote(QuoteDto quoteDto) {
+    public void updateBook(BookDto bookDto) {
         restTemplate.put(
                 endpoint,
-                quoteDto
+                bookDto
         );
     }
 
-    public void createQuote(QuoteDto quoteDto) {
+    public void createBook(BookDto bookDto) {
         restTemplate.postForObject(
                 endpoint,
-                quoteDto,
-                QuoteDto.class
+                bookDto,
+                BookDto.class
         );
     }
 }
