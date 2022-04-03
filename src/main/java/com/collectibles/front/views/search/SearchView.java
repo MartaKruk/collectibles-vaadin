@@ -15,6 +15,7 @@ import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,10 @@ public class SearchView extends VerticalLayout {
 
     Grid<ResultBookDto> grid = new Grid<>();
 
+    private static final String TITLE = "title";
+    private static final String AUTHOR = "author";
+
+    @Autowired
     public SearchView(OpenLibraryClient openLibraryClient) {
         TextField searchTextField = new TextField();
         searchTextField.setPlaceholder("Search by");
@@ -33,8 +38,8 @@ public class SearchView extends VerticalLayout {
         searchTextField.focus();
 
         RadioButtonGroup<String> radioGroup = new RadioButtonGroup<>();
-        radioGroup.setItems(SearchType.TITLE.getText(), SearchType.AUTHOR.getText());
-        radioGroup.setValue(SearchType.TITLE.getText());
+        radioGroup.setItems(TITLE, AUTHOR);
+        radioGroup.setValue(TITLE);
 
         Button searchButton = new Button();
         searchButton.setText("Search");
@@ -90,9 +95,9 @@ public class SearchView extends VerticalLayout {
     private void updateSearchResultBy(String keyword, OpenLibraryClient openLibraryClient, String type) {
         List<ResultBookDto> books = new ArrayList<>();
 
-        if (Objects.equals(type, SearchType.AUTHOR.getText())) {
+        if (Objects.equals(type, AUTHOR)) {
             books = openLibraryClient.getBooksByAuthor(keyword);
-        } else if (Objects.equals(type, SearchType.TITLE.getText())) {
+        } else if (Objects.equals(type, TITLE)) {
             books = openLibraryClient.getBooksByTitle(keyword);
         }
 

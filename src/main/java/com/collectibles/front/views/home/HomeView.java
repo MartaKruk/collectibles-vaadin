@@ -1,7 +1,9 @@
 package com.collectibles.front.views.home;
 
+import com.collectibles.front.data.domain.QuoteDto;
 import com.collectibles.front.data.domain.QuoteLibDto;
 import com.collectibles.front.data.service.QuoteLibService;
+import com.collectibles.front.data.service.QuoteService;
 import com.collectibles.front.views.MainLayout;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H3;
@@ -10,6 +12,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -18,7 +21,8 @@ import java.util.List;
 @RouteAlias(value = "", layout = MainLayout.class)
 public class HomeView extends VerticalLayout {
 
-    public HomeView(QuoteLibService quoteLibService) {
+    @Autowired
+    public HomeView(QuoteLibService quoteLibService, QuoteService quoteService) {
         setSpacing(false);
 
         add(new H1("Welcome to Collectibles!"));

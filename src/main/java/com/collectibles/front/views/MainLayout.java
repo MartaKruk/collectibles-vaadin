@@ -79,7 +79,7 @@ public class MainLayout extends AppLayout {
         Div layout = new Div();
         layout.addClassNames("flex", "h-xl", "items-center", "px-l");
 
-        H1 appName = new H1("collectibles-vaadin");
+        H1 appName = new H1("Collectibles");
         appName.addClassNames("my-0", "me-auto", "text-l");
         layout.add(appName);
 
