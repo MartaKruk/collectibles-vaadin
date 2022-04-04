@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class QuotesView extends VerticalLayout {
 
     private Grid<QuoteDto> grid = new Grid<>(QuoteDto.class);
-    private QuoteService quoteService;
+    private final QuoteService quoteService;
 
     @Autowired
     public QuotesView(QuoteService quoteService) {

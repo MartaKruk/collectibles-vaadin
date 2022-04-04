@@ -1,12 +1,10 @@
 package com.collectibles.front.views.home;
 
-import com.collectibles.front.data.domain.QuoteDto;
 import com.collectibles.front.data.domain.QuoteLibDto;
 import com.collectibles.front.data.service.QuoteLibService;
 import com.collectibles.front.data.service.QuoteService;
 import com.collectibles.front.views.MainLayout;
 import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
@@ -38,6 +36,6 @@ public class HomeView extends VerticalLayout {
         setSizeFull();
         setJustifyContentMode(JustifyContentMode.CENTER);
         setDefaultHorizontalComponentAlignment(Alignment.CENTER);
-        getStyle().set("text-align", "center");
+//        getStyle().set("text-align", "center");
     }
 }

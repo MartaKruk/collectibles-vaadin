@@ -19,4 +19,8 @@ public class CollectionDto {
 
     @JsonProperty("name")
     private String name;
+
+    public CollectionDto(String name) {
+        this.name = name;
+    }
 }

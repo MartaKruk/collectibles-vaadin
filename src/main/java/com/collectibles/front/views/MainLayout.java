@@ -4,8 +4,7 @@ package com.collectibles.front.views;
 import com.collectibles.front.views.admin.AdminView;
 import com.collectibles.front.views.books.BooksView;
 import com.collectibles.front.views.home.HomeView;
-import com.collectibles.front.views.newbook.NewBookView;
-import com.collectibles.front.views.newcollection.NewCollectionView;
+import com.collectibles.front.views.newcollection.CollectionView;
 import com.collectibles.front.views.quotes.QuotesView;
 import com.collectibles.front.views.search.SearchView;
 import com.vaadin.flow.component.Component;
@@ -108,9 +107,7 @@ public class MainLayout extends AppLayout {
 
                 new MenuItemInfo("Search", "la la-search", SearchView.class), //
 
-                new MenuItemInfo("New Book", "la la-plus", NewBookView.class), //
-
-                new MenuItemInfo("New Collection", "la la-plus", NewCollectionView.class), //
+                new MenuItemInfo("Collections", "la la-plus", CollectionView.class), //
 
                 new MenuItemInfo("Quotes", "la la-quote-right", QuotesView.class), //
 

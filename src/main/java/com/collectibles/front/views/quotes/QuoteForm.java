@@ -12,8 +12,8 @@ import com.vaadin.flow.component.textfield.TextField;
 public class QuoteForm extends FormLayout {
 
     private TextField id = new TextField("id");
-    private TextField content = new TextField("content");
-    private TextField author = new TextField("author");
+    private TextField content = new TextField("Content");
+    private TextField author = new TextField("Author");
 
     private Button save = new Button("Save");
     private Button delete = new Button("Delete");
