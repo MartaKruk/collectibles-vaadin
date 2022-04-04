@@ -1,12 +1,6 @@
 package com.collectibles.front.views;
 
 
-import com.collectibles.front.views.admin.AdminView;
-import com.collectibles.front.views.books.BooksView;
-import com.collectibles.front.views.home.HomeView;
-import com.collectibles.front.views.collections.CollectionView;
-import com.collectibles.front.views.quotes.QuotesView;
-import com.collectibles.front.views.search.SearchView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.dependency.NpmPackage;
@@ -19,14 +13,8 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.html.UnorderedList;
 import com.vaadin.flow.router.RouterLink;
 
-/**
- * The main view is a top-level placeholder for other views.
- */
 public class MainLayout extends AppLayout {
 
-    /**
-     * A simple navigation item component, based on ListItem element.
-     */
     public static class MenuItemInfo extends ListItem {
 
         private final Class<? extends Component> view;
@@ -50,14 +38,9 @@ public class MainLayout extends AppLayout {
             return view;
         }
 
-        /**
-         * Simple wrapper to create icons using LineAwesome iconset. See
-         * https://icons8.com/line-awesome
-         */
         @NpmPackage(value = "line-awesome", version = "1.3.0")
         public static class LineAwesomeIcon extends Span {
             public LineAwesomeIcon(String lineawesomeClassnames) {
-                // Use Lumo classnames for suitable font size and margin
                 addClassNames("me-s", "text-l");
                 if (!lineawesomeClassnames.isEmpty()) {
                     addClassNames(lineawesomeClassnames);
@@ -85,7 +68,6 @@ public class MainLayout extends AppLayout {
         Nav nav = new Nav();
         nav.addClassNames("flex", "gap-s", "overflow-auto", "px-m");
 
-        // Wrap the links in a list; improves accessibility
         UnorderedList list = new UnorderedList();
         list.addClassNames("flex", "list-none", "m-0", "p-0");
         nav.add(list);

@@ -1,8 +1,7 @@
-package com.collectibles.front.views.admin;
+package com.collectibles.front.views;
 
 import com.collectibles.front.data.domain.UserDto;
 import com.collectibles.front.data.service.UserService;
-import com.collectibles.front.views.MainLayout;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -15,31 +14,19 @@ import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @PageTitle("Admin")
 @Route(value = "admin", layout = MainLayout.class)
 public class AdminView extends VerticalLayout {
 
-    private TextField id = new TextField("id");
-    private TextField name = new TextField("Name");
-    private PasswordField password = new PasswordField("Password");
-    private ComboBox<String> role = new ComboBox<>("Role");
-
-    private Button addUser = new Button("Add user");
-    private Button save = new Button("Save");
-    private Button delete = new Button("Delete");
-
-    private FormLayout form = new FormLayout();
-    private HorizontalLayout topLayout = new HorizontalLayout();
-    private HorizontalLayout mainLayout = new HorizontalLayout();
-    private HorizontalLayout buttonsLayout = new HorizontalLayout();
-
-
-    private Grid<UserDto> grid = new Grid<>(UserDto.class);
+    private final TextField id = new TextField("id");
+    private final TextField name = new TextField("Name");
+    private final PasswordField password = new PasswordField("Password");
+    private final ComboBox<String> role = new ComboBox<>("Role");
+    private final FormLayout form = new FormLayout();
+    private final Grid<UserDto> grid = new Grid<>(UserDto.class);
     private final UserService userService;
 
-    @Autowired
     public AdminView(UserService userService) {
         this.userService = userService;
 
@@ -50,24 +37,28 @@ public class AdminView extends VerticalLayout {
         role.setItems("USER", "ADMIN");
         role.setValue("USER");
 
+        Button save = new Button("Save");
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        save.addClickListener(e -> {
-            save();
-        });
+        save.addClickListener(e -> save());
 
+        Button delete = new Button("Delete");
         delete.addClickListener(e -> {
             delete(grid.asSingleSelect().getValue().getId());
             grid.asSingleSelect().clear();
         });
 
+        Button addUser = new Button("Add user");
         addUser.addClickListener(e -> {
             grid.asSingleSelect().clear();
             form.setVisible(true);
         });
 
+        HorizontalLayout buttonsLayout = new HorizontalLayout();
         buttonsLayout.add(save, delete);
         form.add(name, password, role, buttonsLayout);
+        HorizontalLayout topLayout = new HorizontalLayout();
         topLayout.add(addUser);
+        HorizontalLayout mainLayout = new HorizontalLayout();
         mainLayout.add(grid, form);
         mainLayout.setSizeFull();
         add(topLayout, mainLayout);

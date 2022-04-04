@@ -1,8 +1,7 @@
-package com.collectibles.front.views.quotes;
+package com.collectibles.front.views;
 
 import com.collectibles.front.data.domain.QuoteDto;
 import com.collectibles.front.data.service.QuoteService;
-import com.collectibles.front.views.MainLayout;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -13,30 +12,18 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @PageTitle("Quotes")
 @Route(value = "quotes", layout = MainLayout.class)
 public class QuotesView extends VerticalLayout {
 
-    private TextField id = new TextField("id");
-    private TextField content = new TextField("Content");
-    private TextField author = new TextField("Author");
-
-    private Button addQuote = new Button("Add quote");
-    private Button save = new Button("Save");
-    private Button delete = new Button("Delete");
-
-    private FormLayout form = new FormLayout();
-
-    private HorizontalLayout topLayout = new HorizontalLayout();
-    private HorizontalLayout mainLayout = new HorizontalLayout();
-    private HorizontalLayout buttonsLayout = new HorizontalLayout();
-    private Grid<QuoteDto> grid = new Grid<>(QuoteDto.class);
-
+    private final TextField id = new TextField("id");
+    private final TextField content = new TextField("Content");
+    private final TextField author = new TextField("Author");
+    private final FormLayout form = new FormLayout();
+    private final Grid<QuoteDto> grid = new Grid<>(QuoteDto.class);
     private final QuoteService quoteService;
 
-    @Autowired
     public QuotesView(QuoteService quoteService) {
         this.quoteService = quoteService;
 
@@ -44,24 +31,28 @@ public class QuotesView extends VerticalLayout {
         grid.setSizeFull();
         grid.addThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT);
 
+        Button save = new Button("Save");
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        save.addClickListener(e -> {
-            save();
-        });
+        save.addClickListener(e -> save());
 
+        Button delete = new Button("Delete");
         delete.addClickListener(e -> {
             delete(grid.asSingleSelect().getValue().getId());
             grid.asSingleSelect().clear();
         });
 
+        Button addQuote = new Button("Add quote");
         addQuote.addClickListener(e -> {
             grid.asSingleSelect().clear();
             form.setVisible(true);
         });
 
+        HorizontalLayout buttonsLayout = new HorizontalLayout();
         buttonsLayout.add(save, delete);
         form.add(content, author, buttonsLayout);
+        HorizontalLayout topLayout = new HorizontalLayout();
         topLayout.add(addQuote);
+        HorizontalLayout mainLayout = new HorizontalLayout();
         mainLayout.add(grid, form);
         mainLayout.setSizeFull();
         add(topLayout, mainLayout);
@@ -70,28 +61,6 @@ public class QuotesView extends VerticalLayout {
         refresh();
 
         grid.asSingleSelect().addValueChangeListener(event -> setQuote(grid.asSingleSelect().getValue()));
-
-//        grid.setColumns("content", "author");
-//        grid.setSizeFull();
-//        grid.addThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT);
-//
-//        QuoteForm form = new QuoteForm(this, quoteService);
-//
-//        HorizontalLayout mainContent = new HorizontalLayout(grid, form);
-//        mainContent.setSizeFull();
-//
-//        Button addQuoteButton = new Button("Add new quote");
-//        addQuoteButton.addClickListener(e -> {
-//            grid.asSingleSelect().clear();
-//            form.setVisible(true);
-//        });
-//
-//        add(addQuoteButton, mainContent);
-//        form.setQuote(null);
-//        setSizeFull();
-//        refresh();
-//
-//        grid.asSingleSelect().addValueChangeListener(event -> form.setQuote(grid.asSingleSelect().getValue()));
     }
 
     public void refresh() {

@@ -1,13 +1,11 @@
-package com.collectibles.front.views.search;
+package com.collectibles.front.views;
 
 import com.collectibles.front.data.client.OpenLibraryClient;
 import com.collectibles.front.data.domain.ResultBookDto;
-import com.collectibles.front.views.MainLayout;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -15,7 +13,6 @@ import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,25 +22,27 @@ import java.util.Objects;
 @Route(value = "search", layout = MainLayout.class)
 public class SearchView extends VerticalLayout {
 
-    Grid<ResultBookDto> grid = new Grid<>();
-
+    private final TextField searchTextField = new TextField();
+    private final RadioButtonGroup<String> radioGroup = new RadioButtonGroup<>();
+    private final Grid<ResultBookDto> grid = new Grid<>();
     private static final String TITLE = "title";
     private static final String AUTHOR = "author";
+    private final OpenLibraryClient openLibraryClient;
 
-    @Autowired
     public SearchView(OpenLibraryClient openLibraryClient) {
-        TextField searchTextField = new TextField();
+        this.openLibraryClient = openLibraryClient;
+
         searchTextField.setPlaceholder("Search by");
         searchTextField.setClearButtonVisible(true);
+        searchTextField.setPrefixComponent(VaadinIcon.SEARCH.create());
         searchTextField.focus();
 
-        RadioButtonGroup<String> radioGroup = new RadioButtonGroup<>();
         radioGroup.setItems(TITLE, AUTHOR);
         radioGroup.setValue(TITLE);
 
         Button searchButton = new Button();
         searchButton.setText("Search");
-        searchButton.addClickListener(e -> updateSearchResultBy(searchTextField.getValue(), openLibraryClient, radioGroup.getValue()));
+        searchButton.addClickListener(e -> updateSearchResultBy(searchTextField.getValue(), radioGroup.getValue()));
 
         HorizontalLayout searchLayout = new HorizontalLayout();
         searchLayout.setPadding(true);
@@ -91,17 +90,15 @@ public class SearchView extends VerticalLayout {
 
         Span year = new Span(String.valueOf(resultBookDto.getYear()));
         author.addClassName("year");
+
         header.add(title);
-
-        Button addButton = new Button("Add", new Icon(VaadinIcon.PLUS));
-
         body.add(author, year);
-        description.add(header, body, addButton);
+        description.add(header, body);
         card.add(description);
         return card;
     }
 
-    private void updateSearchResultBy(String keyword, OpenLibraryClient openLibraryClient, String type) {
+    private void updateSearchResultBy(String keyword, String type) {
         List<ResultBookDto> books = new ArrayList<>();
 
         if (Objects.equals(type, AUTHOR)) {

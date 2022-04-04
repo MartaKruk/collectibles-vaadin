@@ -1,15 +1,13 @@
-package com.collectibles.front.views.home;
+package com.collectibles.front.views;
 
 import com.collectibles.front.data.domain.QuoteLibDto;
 import com.collectibles.front.data.service.QuoteLibService;
-import com.collectibles.front.views.MainLayout;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -20,7 +18,6 @@ public class HomeView extends VerticalLayout {
 
     private final QuoteLibService quoteLibService;
 
-    @Autowired
     public HomeView(QuoteLibService quoteLibService) {
         this.quoteLibService = quoteLibService;
 

@@ -1,10 +1,9 @@
-package com.collectibles.front.views.books;
+package com.collectibles.front.views;
 
 import com.collectibles.front.data.domain.BookDto;
 import com.collectibles.front.data.domain.CollectionDto;
 import com.collectibles.front.data.service.BookService;
 import com.collectibles.front.data.service.CollectionService;
-import com.collectibles.front.views.MainLayout;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -19,7 +18,6 @@ import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -27,31 +25,23 @@ import java.util.List;
 @Route(value = "books", layout = MainLayout.class)
 public class BooksView extends VerticalLayout {
 
-    private TextField id = new TextField("id");
-    private TextField title = new TextField("Title");
-    private TextField author = new TextField("Author");
-    private TextField year = new TextField("Year");
-    private TextField note = new TextField("Note");
-    private ComboBox<CollectionDto> collection = new ComboBox<>("Collection");
-
-    private Button save = new Button("Save");
-    private Button delete = new Button("Delete");
-
-    private Tabs tabs = new Tabs();
-    private Grid<BookDto> grid = new Grid<>(BookDto.class);
-    private FormLayout form = new FormLayout();
-    private HorizontalLayout topLayout = new HorizontalLayout();
-    private HorizontalLayout mainLayout = new HorizontalLayout();
-    private HorizontalLayout buttonsLayout = new HorizontalLayout();
-
+    private final TextField id = new TextField("id");
+    private final TextField title = new TextField("Title");
+    private final TextField author = new TextField("Author");
+    private final TextField year = new TextField("Year");
+    private final TextField note = new TextField("Note");
+    private final ComboBox<CollectionDto> collection = new ComboBox<>("Collection");
+    private final Tabs tabs = new Tabs();
+    private final Grid<BookDto> grid = new Grid<>(BookDto.class);
+    private final FormLayout form = new FormLayout();
     private final BookService bookService;
     private final CollectionService collectionService;
 
-    @Autowired
     public BooksView(BookService bookService, CollectionService collectionService) {
         this.bookService = bookService;
         this.collectionService = collectionService;
 
+        HorizontalLayout mainLayout = new HorizontalLayout();
         mainLayout.setSizeFull();
 
         Tab allBooksTab = new Tab("All books");
@@ -76,17 +66,20 @@ public class BooksView extends VerticalLayout {
         grid.setSizeFull();
         grid.addThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT);
 
+        Button save = new Button("Save");
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         save.addClickListener(e -> {
             grid.asSingleSelect().clear();
             save();
         });
 
+        Button delete = new Button("Delete");
         delete.addClickListener(e -> {
             delete(grid.asSingleSelect().getValue().getId());
             grid.asSingleSelect().clear();
         });
 
+        HorizontalLayout buttonsLayout = new HorizontalLayout();
         buttonsLayout.add(save, delete);
         form.add(title, author, year, note, collection, buttonsLayout);
         form.setVisible(false);
@@ -97,10 +90,9 @@ public class BooksView extends VerticalLayout {
             form.setVisible(true);
         });
         Button browseLibrary = new Button("Browse library");
-        browseLibrary.addClickListener(e -> {
-            UI.getCurrent().navigate("search");
-        });
+        browseLibrary.addClickListener(e -> UI.getCurrent().navigate("search"));
 
+        HorizontalLayout topLayout = new HorizontalLayout();
         topLayout.add(addBook, browseLibrary);
         mainLayout.add(tabs, grid, form);
         add(topLayout, mainLayout);

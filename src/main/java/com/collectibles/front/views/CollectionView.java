@@ -1,9 +1,8 @@
-package com.collectibles.front.views.collections;
+package com.collectibles.front.views;
 
 import com.collectibles.front.data.domain.BookDto;
 import com.collectibles.front.data.domain.CollectionDto;
 import com.collectibles.front.data.service.CollectionService;
-import com.collectibles.front.views.MainLayout;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -21,19 +20,10 @@ import java.util.List;
 @Route(value = "collection", layout = MainLayout.class)
 public class CollectionView extends VerticalLayout {
 
-    private TextField id = new TextField("id");
-    private TextField name = new TextField("Name");
-
-    private Button addCollection = new Button("Add collection");
-    private Button save = new Button("Save");
-    private Button delete = new Button("Delete");
-
-    private FormLayout form = new FormLayout();
-    private HorizontalLayout topLayout = new HorizontalLayout();
-    private HorizontalLayout mainLayout = new HorizontalLayout();
-    private HorizontalLayout buttonsLayout = new HorizontalLayout();
-    private Grid<CollectionDto> grid = new Grid<>(CollectionDto.class);
-
+    private final TextField id = new TextField("id");
+    private final TextField name = new TextField("Name");
+    private final FormLayout form = new FormLayout();
+    private final Grid<CollectionDto> grid = new Grid<>(CollectionDto.class);
     private final CollectionService collectionService;
 
     public CollectionView(CollectionService collectionService) {
@@ -43,24 +33,28 @@ public class CollectionView extends VerticalLayout {
         grid.setSizeFull();
         grid.addThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT);
 
+        Button save = new Button("Save");
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        save.addClickListener(e -> {
-            save();
-        });
+        save.addClickListener(e -> save());
 
+        Button delete = new Button("Delete");
         delete.addClickListener(e -> {
             delete(grid.asSingleSelect().getValue().getId());
             grid.asSingleSelect().clear();
         });
 
+        Button addCollection = new Button("Add collection");
         addCollection.addClickListener(e -> {
             grid.asSingleSelect().clear();
             form.setVisible(true);
         });
 
+        HorizontalLayout buttonsLayout = new HorizontalLayout();
         buttonsLayout.add(save, delete);
         form.add(name, buttonsLayout);
+        HorizontalLayout topLayout = new HorizontalLayout();
         topLayout.add(addCollection);
+        HorizontalLayout mainLayout = new HorizontalLayout();
         mainLayout.add(grid, form);
         mainLayout.setSizeFull();
         add(topLayout, mainLayout);
