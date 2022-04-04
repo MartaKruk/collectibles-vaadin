@@ -4,7 +4,7 @@ package com.collectibles.front.views;
 import com.collectibles.front.views.admin.AdminView;
 import com.collectibles.front.views.books.BooksView;
 import com.collectibles.front.views.home.HomeView;
-import com.collectibles.front.views.newcollection.CollectionView;
+import com.collectibles.front.views.collections.CollectionView;
 import com.collectibles.front.views.quotes.QuotesView;
 import com.collectibles.front.views.search.SearchView;
 import com.vaadin.flow.component.Component;

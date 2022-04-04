@@ -1,4 +1,4 @@
-package com.collectibles.front.views.newcollection;
+package com.collectibles.front.views.collections;
 
 import com.collectibles.front.data.domain.BookDto;
 import com.collectibles.front.data.domain.CollectionDto;

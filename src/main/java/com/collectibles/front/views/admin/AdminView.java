@@ -105,7 +105,7 @@ public class AdminView extends VerticalLayout {
             id.clear();
             name.clear();
             password.clear();
-            role.clear();
+            role.setValue("USER");
             form.setVisible(false);
         } else {
             id.setValue(String.valueOf(userDto.getId()));
