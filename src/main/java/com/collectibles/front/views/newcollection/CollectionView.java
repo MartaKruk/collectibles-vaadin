@@ -2,7 +2,6 @@ package com.collectibles.front.views.newcollection;
 
 import com.collectibles.front.data.domain.BookDto;
 import com.collectibles.front.data.domain.CollectionDto;
-import com.collectibles.front.data.service.BookService;
 import com.collectibles.front.data.service.CollectionService;
 import com.collectibles.front.views.MainLayout;
 import com.vaadin.flow.component.button.Button;
@@ -36,11 +35,9 @@ public class CollectionView extends VerticalLayout {
     private Grid<CollectionDto> grid = new Grid<>(CollectionDto.class);
 
     private final CollectionService collectionService;
-    private final BookService bookService;
 
-    public CollectionView(CollectionService collectionService, BookService bookService) {
+    public CollectionView(CollectionService collectionService) {
         this.collectionService = collectionService;
-        this.bookService = bookService;
 
         grid.setColumns("name");
         grid.setSizeFull();
@@ -79,15 +76,11 @@ public class CollectionView extends VerticalLayout {
     }
 
     public void save() {
-        CollectionDto collectionDto;
         if (grid.asSingleSelect().isEmpty()) {
-            collectionDto = new CollectionDto(name.getValue());
-            collectionService.createCollection(collectionDto);
+            collectionService.createCollection(new CollectionDto(name.getValue()));
         } else {
-            collectionDto = new CollectionDto(grid.asSingleSelect().getValue().getId(), name.getValue());
-            collectionService.updateCollection(collectionDto);
+            collectionService.updateCollection(new CollectionDto(grid.asSingleSelect().getValue().getId(), name.getValue()));
         }
-
         refresh();
         setCollection(null);
     }
@@ -100,7 +93,6 @@ public class CollectionView extends VerticalLayout {
             }
             collectionService.deleteCollection(id);
         }
-
         refresh();
         setCollection(null);
     }

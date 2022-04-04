@@ -25,4 +25,10 @@ public class UserDto {
 
     @JsonProperty("role")
     private String role;
+
+    public UserDto(String name, String password, String role) {
+        this.name = name;
+        this.password = password;
+        this.role = role;
+    }
 }
