@@ -28,4 +28,11 @@ public class BookDto {
 
     @JsonProperty("note")
     private String note;
+
+    public BookDto(String title, String author, String year, String note) {
+        this.title = title;
+        this.author = author;
+        this.year = year;
+        this.note = note;
+    }
 }

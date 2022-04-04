@@ -3,6 +3,7 @@ package com.collectibles.front.views.books;
 import com.collectibles.front.data.domain.BookDto;
 import com.collectibles.front.data.domain.CollectionDto;
 import com.collectibles.front.data.service.BookService;
+import com.collectibles.front.data.service.CollectionService;
 import com.collectibles.front.views.MainLayout;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -20,6 +21,8 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 @PageTitle("Books")
 @Route(value = "books", layout = MainLayout.class)
 public class BooksView extends VerticalLayout {
@@ -29,30 +32,45 @@ public class BooksView extends VerticalLayout {
     private TextField author = new TextField("Author");
     private TextField year = new TextField("Year");
     private TextField note = new TextField("Note");
+    private ComboBox<CollectionDto> collection = new ComboBox<>("Collection");
 
     private Button save = new Button("Save");
     private Button delete = new Button("Delete");
 
+    private Tabs tabs = new Tabs();
     private Grid<BookDto> grid = new Grid<>(BookDto.class);
-    private FormLayout bookForm = new FormLayout();
+    private FormLayout form = new FormLayout();
     private HorizontalLayout topLayout = new HorizontalLayout();
     private HorizontalLayout mainLayout = new HorizontalLayout();
     private HorizontalLayout buttonsLayout = new HorizontalLayout();
 
     private final BookService bookService;
+    private final CollectionService collectionService;
 
     @Autowired
-    public BooksView(BookService bookService) {
+    public BooksView(BookService bookService, CollectionService collectionService) {
         this.bookService = bookService;
+        this.collectionService = collectionService;
 
         mainLayout.setSizeFull();
 
         Tab allBooksTab = new Tab("All books");
-        Tab collectionTab = new Tab("Collection");
-        Tabs tabs = new Tabs(allBooksTab, collectionTab);
-        tabs.setOrientation(Tabs.Orientation.VERTICAL);
+        tabs.add(allBooksTab);
 
-        ComboBox<CollectionDto> comboBox = new ComboBox<>("Collection");
+        List<CollectionDto> collections = collectionService.fetchCollections();
+        for (CollectionDto collectionDto : collections) {
+            Tab tab = new Tab(collectionDto.getName());
+            tab.setId(String.valueOf(collectionDto.getId()));
+            tabs.add(tab);
+        }
+
+        tabs.setOrientation(Tabs.Orientation.VERTICAL);
+        tabs.addSelectedChangeListener(e -> refresh());
+
+        collection.setItems(collectionService.fetchCollections());
+        collection.setItemLabelGenerator(CollectionDto::getName);
+        collection.setRequired(true);
+        collection.setErrorMessage("This field is required");
 
         grid.setColumns("title", "author", "year", "note");
         grid.setSizeFull();
@@ -65,18 +83,18 @@ public class BooksView extends VerticalLayout {
         });
 
         delete.addClickListener(e -> {
+            delete(grid.asSingleSelect().getValue().getId());
             grid.asSingleSelect().clear();
-            delete();
         });
 
         buttonsLayout.add(save, delete);
-        bookForm.add(title, author, year, note, buttonsLayout);
-        bookForm.setVisible(false);
+        form.add(title, author, year, note, collection, buttonsLayout);
+        form.setVisible(false);
 
         Button addBook = new Button("Add book");
         addBook.addClickListener(e -> {
             grid.asSingleSelect().clear();
-            bookForm.setVisible(true);
+            form.setVisible(true);
         });
         Button browseLibrary = new Button("Browse library");
         browseLibrary.addClickListener(e -> {
@@ -84,29 +102,57 @@ public class BooksView extends VerticalLayout {
         });
 
         topLayout.add(addBook, browseLibrary);
-        mainLayout.add(tabs, grid, bookForm);
+        mainLayout.add(tabs, grid, form);
         add(topLayout, mainLayout);
         setSizeFull();
         refresh();
+
+        grid.asSingleSelect().addValueChangeListener(event -> setBook(grid.asSingleSelect().getValue()));
     }
 
     public void refresh() {
-        grid.setItems(bookService.fetchBooks());
-    }
-
-    public void updateGrid() {
-
+        if (tabs.getSelectedTab().getId().isEmpty()) {
+            grid.setItems(bookService.fetchBooks());
+        } else {
+            grid.setItems(collectionService.fetchBooksInCollection(Long.parseLong(tabs.getSelectedTab().getId().get())));
+        }
     }
 
     public void save() {
-        bookForm.setVisible(false);
+        if (grid.asSingleSelect().isEmpty()) {
+            collectionService.addBookToCollection(collection.getValue().getId(), new BookDto(title.getValue(), author.getValue(), year.getValue(), note.getValue()));
+        } else {
+            bookService.updateBook(new BookDto(grid.asSingleSelect().getValue().getId(), title.getValue(), author.getValue(), year.getValue(), note.getValue()));
+        }
+        refresh();
+        setBook(null);
     }
 
-    public void delete() {
-        bookForm.setVisible(false);
+    public void delete(Long id)  {
+        if (id != 0) {
+            bookService.deleteBook(id);
+        }
+        refresh();
+        setBook(null);
     }
 
     public void setBook(BookDto bookDto) {
-
+        if (bookDto == null) {
+            id.clear();
+            title.clear();
+            author.clear();
+            year.clear();
+            note.clear();
+            collection.clear();
+            form.setVisible(false);
+        } else {
+            id.setValue(String.valueOf(bookDto.getId()));
+            title.setValue(bookDto.getTitle());
+            author.setValue(bookDto.getAuthor());
+            year.setValue(bookDto.getYear());
+            note.setValue(bookDto.getNote());
+            form.setVisible(true);
+            title.focus();
+        }
     }
 }
