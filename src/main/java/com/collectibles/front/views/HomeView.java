@@ -2,7 +2,7 @@ package com.collectibles.front.views;
 
 import com.collectibles.front.data.domain.QuoteLibDto;
 import com.collectibles.front.data.service.QuoteLibService;
-import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
@@ -23,7 +23,7 @@ public class HomeView extends VerticalLayout {
 
         setSpacing(true);
 
-        add(new H1("Welcome to Collectibles!"));
+        add(new H2("Welcome to Collectibles!"));
         add(new Paragraph("Here you can store your favourite books and quotes and browse an open library"));
 
         List<QuoteLibDto> quotes = quoteLibService.fetchRandomQuote();
@@ -33,7 +33,6 @@ public class HomeView extends VerticalLayout {
             add(new Paragraph("- " + quote.getAuthor()));
         }
 
-        setSizeFull();
         setJustifyContentMode(JustifyContentMode.CENTER);
         setDefaultHorizontalComponentAlignment(Alignment.CENTER);
         getStyle().set("text-align", "center");
