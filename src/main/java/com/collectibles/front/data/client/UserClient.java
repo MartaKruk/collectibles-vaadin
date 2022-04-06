@@ -1,8 +1,8 @@
 package com.collectibles.front.data.client;
 
+import com.collectibles.front.data.config.CollectiblesConfig;
 import com.collectibles.front.data.domain.UserDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -15,14 +15,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserClient {
 
-    @Value("${collectibles.app.users.endpoint}")
-    private String endpoint;
-
+    private final CollectiblesConfig config;
     private final RestTemplate restTemplate;
 
     public List<UserDto> getUsers() {
         UserDto[] response = restTemplate.getForObject(
-                endpoint,
+                config.getEndpoint() + config.getUsersPath(),
                 UserDto[].class
         );
 
@@ -33,7 +31,7 @@ public class UserClient {
 
     public UserDto getUser(Long id) {
         UserDto response = restTemplate.getForObject(
-                endpoint + "/" + id,
+                config.getEndpoint() + config.getUsersPath() + "/" + id,
                 UserDto.class
         );
 
@@ -42,19 +40,19 @@ public class UserClient {
     }
 
     public void deleteUser(Long id) {
-        restTemplate.delete(endpoint + "/" + id);
+        restTemplate.delete(config.getEndpoint() + config.getUsersPath() + "/" + id);
     }
 
     public void updateUser(UserDto userDto) {
         restTemplate.put(
-                endpoint,
+                config.getEndpoint() + config.getUsersPath(),
                 userDto
         );
     }
 
     public void createUser(UserDto userDto) {
         restTemplate.postForObject(
-                endpoint,
+                config.getEndpoint() + config.getUsersPath(),
                 userDto,
                 UserDto.class
         );

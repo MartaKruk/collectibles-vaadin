@@ -1,9 +1,9 @@
 package com.collectibles.front.data.client;
 
+import com.collectibles.front.data.config.CollectiblesConfig;
 import com.collectibles.front.data.domain.BookDto;
 import com.collectibles.front.data.domain.CollectionDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -16,14 +16,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CollectionClient {
 
-    @Value("${collectibles.app.collections.endpoint}")
-    private String endpoint;
-
+    private final CollectiblesConfig config;
     private final RestTemplate restTemplate;
 
     public List<CollectionDto> getCollections() {
         CollectionDto[] response = restTemplate.getForObject(
-                endpoint,
+                config.getEndpoint() + config.getCollectionsPath(),
                 CollectionDto[].class
         );
 
@@ -34,7 +32,7 @@ public class CollectionClient {
 
     public CollectionDto getCollection(Long id) {
         CollectionDto response = restTemplate.getForObject(
-                endpoint + "/" + id,
+                config.getEndpoint() + config.getCollectionsPath() + "/" + id,
                 CollectionDto.class
         );
 
@@ -43,19 +41,19 @@ public class CollectionClient {
     }
 
     public void deleteCollection(Long id) {
-        restTemplate.delete(endpoint + "/" + id);
+        restTemplate.delete(config.getEndpoint() + config.getCollectionsPath() + "/" + id);
     }
 
     public void updateCollection(CollectionDto collectionDto) {
         restTemplate.put(
-                endpoint,
+                config.getEndpoint() + config.getCollectionsPath(),
                 collectionDto
         );
     }
 
     public void createCollection(CollectionDto collectionDto) {
         restTemplate.postForObject(
-                endpoint,
+                config.getEndpoint() + config.getCollectionsPath(),
                 collectionDto,
                 CollectionDto.class
         );
@@ -63,7 +61,7 @@ public class CollectionClient {
 
     public List<BookDto> getBooksInCollection(Long id) {
         BookDto[] response = restTemplate.getForObject(
-                endpoint + "/" + id + "/books",
+                config.getEndpoint() + config.getCollectionsPath() + "/" + id + "/books",
                 BookDto[].class
         );
 
@@ -74,13 +72,13 @@ public class CollectionClient {
 
     public void addBookToCollection(Long id, BookDto bookDto) {
         restTemplate.postForObject(
-                endpoint + "/" + id + "/books",
+                config.getEndpoint() + config.getCollectionsPath() + "/" + id + "/books",
                 bookDto,
                 BookDto.class
         );
     }
 
     public void deleteBookFromCollection(Long collectionId, Long bookId) {
-        restTemplate.delete(endpoint + "/" + collectionId + "/books/" + bookId);
+        restTemplate.delete(config.getEndpoint() + config.getCollectionsPath() + "/" + collectionId + "/books/" + bookId);
     }
 }

@@ -1,8 +1,8 @@
 package com.collectibles.front.data.client;
 
+import com.collectibles.front.data.config.CollectiblesConfig;
 import com.collectibles.front.data.domain.QuoteDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -15,14 +15,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class QuoteClient {
 
-    @Value("${collectibles.app.quotes.endpoint}")
-    private String endpoint;
-
+    private final CollectiblesConfig config;
     private final RestTemplate restTemplate;
 
     public List<QuoteDto> getQuotes() {
         QuoteDto[] response = restTemplate.getForObject(
-                endpoint,
+                config.getEndpoint() + config.getQuotesPath(),
                 QuoteDto[].class
         );
 
@@ -33,7 +31,7 @@ public class QuoteClient {
 
     public QuoteDto getQuote(Long id) {
         QuoteDto response = restTemplate.getForObject(
-                endpoint + "/" + id,
+                config.getEndpoint() + config.getQuotesPath() + "/" + id,
                 QuoteDto.class
         );
 
@@ -42,19 +40,19 @@ public class QuoteClient {
     }
 
     public void deleteQuote(Long id) {
-        restTemplate.delete(endpoint + "/" + id);
+        restTemplate.delete(config.getEndpoint() + config.getQuotesPath() + "/" + id);
     }
 
     public void updateQuote(QuoteDto quoteDto) {
         restTemplate.put(
-                endpoint,
+                config.getEndpoint() + config.getQuotesPath(),
                 quoteDto
         );
     }
 
     public void createQuote(QuoteDto quoteDto) {
         restTemplate.postForObject(
-                endpoint,
+                config.getEndpoint() + config.getQuotesPath(),
                 quoteDto,
                 QuoteDto.class
         );

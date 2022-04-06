@@ -1,8 +1,8 @@
 package com.collectibles.front.data.client;
 
+import com.collectibles.front.data.config.CollectiblesConfig;
 import com.collectibles.front.data.domain.BookDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -15,14 +15,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class BookClient {
 
-    @Value("${collectibles.app.books.endpoint}")
-    private String endpoint;
-
+    private final CollectiblesConfig config;
     private final RestTemplate restTemplate;
 
     public List<BookDto> getBooks() {
         BookDto[] response = restTemplate.getForObject(
-                endpoint,
+                config.getEndpoint() + config.getBooksPath(),
                 BookDto[].class
         );
 
@@ -33,7 +31,7 @@ public class BookClient {
 
     public BookDto getBook(Long id) {
         BookDto response = restTemplate.getForObject(
-                endpoint + "/" + id,
+                config.getEndpoint() + config.getBooksPath() + "/" + id,
                 BookDto.class
         );
 
@@ -42,19 +40,19 @@ public class BookClient {
     }
 
     public void deleteBook(Long id) {
-        restTemplate.delete(endpoint + "/" + id);
+        restTemplate.delete(config.getEndpoint() + config.getBooksPath() + "/" + id);
     }
 
     public void updateBook(BookDto bookDto) {
         restTemplate.put(
-                endpoint,
+                config.getEndpoint() + config.getBooksPath(),
                 bookDto
         );
     }
 
     public void createBook(BookDto bookDto) {
         restTemplate.postForObject(
-                endpoint,
+                config.getEndpoint() + config.getBooksPath(),
                 bookDto,
                 BookDto.class
         );

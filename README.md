@@ -1,47 +1,56 @@
-# collectibles-vaadin
+# Collectibles Application
 
-This project can be used as a starting point to create your own Vaadin application with Spring Boot.
-It contains all the necessary configuration and some placeholder files to get you started.
+This project is a CRUD application for collecting books and quotes created using Spring Boot and REST API. 
+Frontend of the application is created with Vaadin Framework as a separate Spring Boot application.
+
+## Current features of the application:
+
+- storing books in custom collections 
+- browsing an open library for new books to add to the collection
+- storing quotes in the app
+- daily quotes update that adds a new random quote to the collection
+- both books and quotes are editable
+- homepage features a random quote updated on refresh
 
 ## Running the application
 
-The project is a standard Maven project. To run it from the command line,
-type `mvnw` (Windows), or `./mvnw` (Mac & Linux), then open
-http://localhost:8080 in your browser.
+Here's how to run the application in few easy steps:
 
-You can also import the project to your IDE of choice as you would with any
-Maven project. Read more on [how to import Vaadin projects to different 
-IDEs](https://vaadin.com/docs/latest/flow/guide/step-by-step/importing) (Eclipse, IntelliJ IDEA, NetBeans, and VS Code).
+1. Download front app from [this repository](https://github.com/MartaKruk/collectibles-vaadin) and run it locally
+2. Front app is set up on port [8081](http://localhost:8081/) - should open automatically
 
-## Deploying to Production
+Another way - in case you want to run both apps locally:
 
-To create a production build, call `mvnw clean package -Pproduction` (Windows),
-or `./mvnw clean package -Pproduction` (Mac & Linux).
-This will build a JAR file with all the dependencies and front-end resources,
-ready to be deployed. The file can be found in the `target` folder after the build completes.
-
-Once the JAR file is built, you can run it using
-`java -jar target/collectibles-vaadin-1.0-SNAPSHOT.jar`
-
-## Project structure
-
-- `MainLayout.java` in `src/main/java` contains the navigation setup (i.e., the
-  side/top bar and the main menu). This setup uses
-  [App Layout](https://vaadin.com/components/vaadin-app-layout).
-- `views` package in `src/main/java` contains the server-side Java views of your application.
-- `views` folder in `frontend/` contains the client-side JavaScript views of your application.
-- `themes` folder in `frontend/` contains the custom CSS styles.
+1. Download back app from [this repository](https://github.com/MartaKruk/collectibles) and front app from [this repository](https://github.com/MartaKruk/collectibles-vaadin)
+2. In the front app go to `src/main/resources/application.properties` and change `collectibles.app.endpoint` value to `http://localhost:8080`
+3. Run MySQL database server with credentials as listed in `src/main/resources/application.properties` in backend app
+4. Run both applications locally
+5. Front app is set up on port [8081](http://localhost:8081/) - should open automatically
 
 ## Useful links
 
-- Read the documentation at [vaadin.com/docs](https://vaadin.com/docs).
-- Follow the tutorials at [vaadin.com/tutorials](https://vaadin.com/tutorials).
-- Watch training videos and get certified at [vaadin.com/learn/training](https://vaadin.com/learn/training).
-- Create new projects at [start.vaadin.com](https://start.vaadin.com/).
-- Search UI components and their usage examples at [vaadin.com/components](https://vaadin.com/components).
-- View use case applications that demonstrate Vaadin capabilities at [vaadin.com/examples-and-demos](https://vaadin.com/examples-and-demos).
-- Discover Vaadin's set of CSS utility classes that enable building any UI without custom CSS in the [docs](https://vaadin.com/docs/latest/ds/foundation/utility-classes). 
-- Find a collection of solutions to common use cases in [Vaadin Cookbook](https://cookbook.vaadin.com/).
-- Find Add-ons at [vaadin.com/directory](https://vaadin.com/directory).
-- Ask questions on [Stack Overflow](https://stackoverflow.com/questions/tagged/vaadin) or join our [Discord channel](https://discord.gg/MYFq5RTbBn).
-- Report issues, create pull requests in [GitHub](https://github.com/vaadin/platform).
+Repository for the backend app: [github.com/MartaKruk/collectibles](https://github.com/MartaKruk/collectibles)
+
+Repository for the frontend app: [github.com/MartaKruk/collectibles-vaadin](https://github.com/MartaKruk/collectibles-vaadin)
+
+Backend app on heroku: [collectibles-application.herokuapp.com](https://collectibles-application.herokuapp.com)
+
+Backed API documentation generated using Swagger: [collectibles-application.herokuapp.com/swagger-ui.html](https://collectibles-application.herokuapp.com/swagger-ui.html)
+
+Open Library API used to browse books: [openlibrary.org/dev/docs/api/search](https://openlibrary.org/dev/docs/api/search)
+
+QuoteLib API used to generate a random quote: [rapidapi.com/Jujo/api/quotelibapi](https://rapidapi.com/Jujo/api/quotelibapi/)
+
+## Test coverage
+
+![Test coverage: 75% methods, 80% lines](src/main/resources/test_coverage.png)
+
+## Features in development
+
+Planned improvements are listed below:
+
+- [ ] Deployment of front app to Heroku
+- [ ] User log in and authentication
+- [ ] Adding books to collection directly from the search results
+- [ ] Refactoring frontend application so that it uses in-app objects instead of dtos
+- [ ] Adding paging to open library search results
